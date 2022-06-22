@@ -3,138 +3,138 @@ import { app, database } from '../services/firebase'
 import { collection, deleteDoc, getDocs, orderBy, query, doc, getDoc } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
 import { deleteBtn } from './Delete'
+import { show } from './Update'
 
 //definir a coleção
 const contato = collection(database, 'contato')
 
 export default function Create() {
 
-    //read
-    const [lista, setLista] = useState([])
+  //read
+  const [lista, setLista] = useState([])
 
-    const read = () => {
-    getDocs(query(contato, orderBy('nome')))
-        .then((data) => {
-            setLista(data.docs.map((item) => {
-                return { ...item.data(), id:item.id }
-            }))
-        })
-    }
+  const read = () => {
+  getDocs(query(contato, orderBy('nome')))
+      .then((data) => {
+          setLista(data.docs.map((item) => {
+              return { ...item.data(), id:item.id }
+          }))
+      })
+  }
     
-    //  +---------------------------------------------+
-    //  | mostrar os documentos ao atualizar a pagina |
-    //  +---------------------------------------------+
-    useEffect(() => {
-        read()
-    }, [])
+  //  +---------------------------------------------+
+  //  | mostrar os documentos ao atualizar a pagina |
+  //  +---------------------------------------------+
+  useEffect(() => {
+      read()
+  }, [])
+ 
+  //  +----------------+
+  //  | update comceço |
+  //  +----------------+
 
-    //  +----------------+
-    //  | update comceço |
-    //  +----------------+
+  // const [ID, setID] = useState(null)
+  // const [contatoUnico, setContatoUnico] = useState({})
+  // const [mostrar, setMostrar] = useState(false)
 
-    const [ID, setID] = useState(null)
-    const [contatoUnico, setContatoUnico] = useState({})
-    const [mostrar, setMostrar] = useState(false)
+  // //hooks
+  // const[nome, setNome] = useState('')
+  // const[email, setEmail] = useState('')
+  // const[telefone, setTelefone] = useState('')
+  // const[mensagem, setMensagem] = useState('')
 
-    //hooks
-    const[nome, setNome] = useState('')
-    const[email, setEmail] = useState('')
-    const[telefone, setTelefone] = useState('')
-    const[mensagem, setMensagem] = useState('')
+  // const show = async(id)=>{
+  //   setID(id)
+  //   if(ID != null){
+  //     const contatoSimples = doc(database,"contato",ID)
+  //     const resultado = await getDoc(contatoSimples)
+  //     setContatoUnico({...resultado.data(),id:resultado.id})
+  //     setNome(contatoUnico.nome)
+  //     setEmail(contatoUnico.email)
+  //     setTelefone(contatoUnico.telefone)
+  //     setMensagem(contatoUnico.mensagem)
+  //     setMostrar(true)
+  //   }
+  // }
+  // useEffect(()=>{
+  //   show()
+  // },[ID])
 
-    const show = async(id)=>{
-      setID(id)
-      if(ID != null){
-        const contatoSimples = doc(database,"contato",ID)
-        const resultado = await getDoc(contatoSimples)
-        setContatoUnico({...resultado.data(),id:resultado.id})
-        setNome(contatoUnico.nome)
-        setEmail(contatoUnico.email)
-        setTelefone(contatoUnico.telefone)
-        setMensagem(contatoUnico.mensagem)
-        setMostrar(true)
-      }
-    }
-    useEffect(()=>{
-      show()
-    },[ID])
+  //  +------------+
+  //  | update fim |
+  //  +------------+
 
-    //  +------------+
-    //  | update fim |
-    //  +------------+
+  return (
+      <>
 
-    return (
-        <>
+      {/* {mostrar ?(
+        <div>
+          <h3 className="text-center">Alterar</h3>
+          <input 
+              type="text" 
+              placeholder="Nome" 
+              className="form-control" 
+              required 
+              onChange={event=>setNome(event.target.value)}
+              value={nome}
+          /> 
+          <input 
+              type="email" 
+              placeholder="Email" 
+              className="form-control" 
+              required 
+              onChange={event=>setEmail(event.target.value)}
+              value={email}
+          /> 
+          <input 
+              type="tel" 
+              placeholder="Telefone" 
+              className="form-control" 
+              required 
+              onChange={event=>setTelefone(event.target.value)}
+              value={telefone}
+          /> 
+          <textarea 
+              placeholder="Mensagem" 
+              className="form-control" 
+              required 
+              onChange={event=>setMensagem(event.target.value)}
+              value={mensagem}
+          />
+          <input 
+              type="button" 
+              value="Salvar" 
+              className="btn btn-outline-dark form-control"             
+          />
+        </div>
+      ):(
+        <></>
+      )} */}
 
-        {mostrar ?(
-          <div>
-            <h3 className="text-center">Alterar</h3>
-            <input 
-                type="text" 
-                placeholder="Nome" 
-                className="form-control" 
-                required 
-                onChange={event=>setNome(event.target.value)}
-                value={nome}
-            /> 
-            <input 
-                type="email" 
-                placeholder="Email" 
-                className="form-control" 
-                required 
-                onChange={event=>setEmail(event.target.value)}
-                value={email}
-            /> 
-            <input 
-                type="tel" 
-                placeholder="Telefone" 
-                className="form-control" 
-                required 
-                onChange={event=>setTelefone(event.target.value)}
-                value={telefone}
-            /> 
-            <textarea 
-                placeholder="Mensagem" 
-                className="form-control" 
-                required 
-                onChange={event=>setMensagem(event.target.value)}
-                value={mensagem}
-            />
-            <input 
-                type="button" 
-                value="Salvar" 
-                className="btn btn-outline-dark form-control"             
-            />
-          </div>
-        ):(
-          <></>
-        )}
-
-
-          <h3 className="text-center">Exibir</h3>
-            {lista.map((lista) => {
-              return (
-                <>
-                <div className="card">
-                  <div className="card-header bg-dark text-light">
-                      Id: {lista.id}
-                  </div>
-                  <div className="card-body bg-secondary text-light">
-                      <p className="card-title text-info">Nome: {lista.nome}</p>
-                      <p className="card-subtitle">Email: {lista.email}</p>
-                      <p className="card-subtitle">Telefone: {lista.telefone}</p>
-                      <p className="card-subtitle">Mensagem: {lista.mensagem}</p>
-                  </div>
-                  <div className="card-footer bg-dark">
-                    <div className="input-group">
-                      <input type="button" value="Alterar" onClick={()=>show(lista.id)} className="btn btn-outline-warning form-control" />
-                      <input type="button" value="Excluir" onClick={()=>deleteBtn(lista.id)} className="btn btn-outline-danger form-control" />
-                    </div>
+        <h3 className="text-center">Exibir</h3>
+          {lista.map((lista) => {
+            return (
+              <>
+              <div className="card">
+                <div className="card-header bg-dark text-light">
+                    Id: {lista.id}
+                </div>
+                <div className="card-body bg-secondary text-light">
+                    <p className="card-title text-info">Nome: {lista.nome}</p>
+                    <p className="card-subtitle">Email: {lista.email}</p>
+                    <p className="card-subtitle">Telefone: {lista.telefone}</p>
+                    <p className="card-subtitle">Mensagem: {lista.mensagem}</p>
+                </div>
+                <div className="card-footer bg-dark">
+                  <div className="input-group">
+                    <input type="button" value="Alterar" onClick={()=>show(lista.id)} className="btn btn-outline-warning form-control" />
+                    <input type="button" value="Excluir" onClick={()=>deleteBtn(lista.id)} className="btn btn-outline-danger form-control" />
                   </div>
                 </div>
-                </>
-              )
-            })}
-        </>
-    )
+              </div>
+              </>
+            )
+          })}
+      </>
+  )
 }
