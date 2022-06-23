@@ -1,6 +1,6 @@
 //importar as configurações do firebase
 import { app, database } from '../services/firebase'
-import { collection, deleteDoc, getDocs, orderBy, query, doc, getDoc } from 'firebase/firestore'
+import { collection, deleteDoc, getDocs, orderBy, query, doc, getDoc, updateDoc } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
 import { deleteBtn } from './Delete'
 // import { show } from './Update'
@@ -71,6 +71,24 @@ export default function Create() {
     setID(null)
   }
 
+  const btnAlterar = (id)=>{
+    const contatoShow = doc(database, "contato", id)
+    updateDoc(contatoShow,{
+      nome: nome,
+      email: email,
+      telefone: telefone,
+      mensagem: mensagem
+    }).then(()=>{
+      setNome("")
+      setEmail("")
+      setTelefone("")
+      setMensagem("")
+      setID(null)
+      read()
+      setMostrar(false)
+    })
+  }
+
   //  +------------+
   //  | update fim |
   //  +------------+
@@ -85,7 +103,7 @@ export default function Create() {
           <input type="email" placeholder="Email" className="form-control" required onChange={event=>setEmail(event.target.value)} value={email}/> 
           <input type="tel" placeholder="Telefone" className="form-control" required onChange={event=>setTelefone(event.target.value)} value={telefone}/> 
           <textarea placeholder="Mensagem" className="form-control" required onChange={event=>setMensagem(event.target.value)} value={mensagem}/>
-          <input type="submit" value="Salvar" className="btn btn-outline-dark form-control"/>
+          <input type="submit" value="Salvar" onClick={()=>btnAlterar(contatoUnico.id)} className="btn btn-outline-dark form-control"/>
           <input type="button" value="Cancelar" onClick={btnCancelar} className="btn btn-outline-danger form-control"/>
         </div>
       ):(
